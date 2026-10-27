@@ -57,7 +57,7 @@ function Home() {
           </h1>
           <p className="mt-2 font-display text-3xl text-muted-foreground sm:text-4xl">How can I help today?</p>
           <div className="mt-10">
-            <Composer onSubmit={start} status={busy ? "submitted" : undefined} />
+            <Composer onSubmit={start} {...(busy ? { status: "submitted" as const } : {})} />
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
             {SUGGESTIONS.map((s) => (
