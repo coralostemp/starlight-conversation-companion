@@ -40,14 +40,20 @@ export function AppShell({ children }: { children: ReactNode }) {
     const title = window.prompt("Rename chat", current)?.trim();
     if (!title) return;
     const { error } = await supabase.from("chats").update({ title }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     qc.invalidateQueries({ queryKey: ["chats"] });
   }
 
   async function remove(id: string) {
     if (!window.confirm("Delete this chat?")) return;
     const { error } = await supabase.from("chats").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     qc.invalidateQueries({ queryKey: ["chats"] });
     if (params.chatId === id) navigate({ to: "/" });
   }

@@ -18,8 +18,8 @@ const json = (status: number, error: string) =>
   new Response(JSON.stringify({ error }), { status, headers: { "content-type": "application/json" } });
 
 function userClient(token: string) {
-  const url = process.env.SUPABASE_URL!;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
+  const url = process.env["SUPABASE_URL"]!;
+  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
   return createClient<Database>(url, key, {
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
     global: {
@@ -67,7 +67,7 @@ export async function handleChat(request: Request) {
     .maybeSingle();
   if (chatErr || !chat) return json(404, "Chat not found.");
 
-  const last = messages[messages.length - 1];
+  const last = messages[messages.length - 1]!;
   if (last.role === "user") {
     const { error } = await supabase.from("messages").upsert(
       { chat_id: chatId, user_id: userId, ui_id: last.id, role: "user", parts: last.parts as unknown as Json },
@@ -106,7 +106,7 @@ export async function handleChat(request: Request) {
     })),
   );
 
-  const apiKey = process.env.LOVABLE_API_KEY;
+  const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) return json(500, "AI is not configured.");
 
   const runIdFetch = createLovableAiGatewayRunIdFetch(getLovableAiGatewayRunId(request));

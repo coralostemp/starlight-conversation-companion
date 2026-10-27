@@ -36,7 +36,7 @@ export async function uploadFiles(files: FileUIPart[]): Promise<FileUIPart[]> {
         .from("attachments")
         .upload(path, blob, { contentType: f.mediaType, upsert: false });
       if (error) throw new Error(`Could not upload ${f.filename ?? "file"}: ${error.message}`);
-      return { type: "file" as const, mediaType: f.mediaType, filename: f.filename, url: `storage:${path}` };
+      return { type: "file" as const, mediaType: f.mediaType, url: `storage:${path}`, ...(f.filename ? { filename: f.filename } : {}) } as FileUIPart;
     }),
   );
 }

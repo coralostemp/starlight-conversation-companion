@@ -56,8 +56,8 @@ export function Composer({
   onStop,
 }: {
   onSubmit: (m: PromptInputMessage) => void | Promise<void>;
-  status?: ChatStatus;
-  onStop?: () => void;
+  status?: ChatStatus | undefined;
+  onStop?: (() => void) | undefined;
 }) {
   return (
     <PromptInput
@@ -75,7 +75,7 @@ export function Composer({
         <PromptInputTools>
           <AttachButton />
         </PromptInputTools>
-        <PromptInputSubmit status={status} onStop={onStop} className="rounded-full" />
+        <PromptInputSubmit {...(status ? { status } : {})} {...(onStop ? { onStop } : {})} className="rounded-full" />
       </PromptInputFooter>
     </PromptInput>
   );
